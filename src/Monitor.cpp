@@ -41,7 +41,7 @@ void Monitor::Run() {
       analogWrite(1, 255);
 #else
       this->_leds.Clear();
-      this->_leds.SetColor(this->_GREEN);
+      this->_leds.SetColor(this->_leds.Colors.Green);
 #endif
   }
 
@@ -53,7 +53,7 @@ void Monitor::Run() {
       analogWrite(1, 128);
 #else
       this->_leds.Clear();
-      this->_leds.SetColor(this->_YELLOW);
+      this->_leds.SetColor(this->_leds.Colors.Yellow);
 #endif
   }
 
@@ -64,7 +64,7 @@ void Monitor::Run() {
       analogWrite(0, 255);
 #else
       this->_leds.Clear();
-      this->_leds.SetColor(this->_RED);
+      this->_leds.SetColor(this->_leds.Colors.Red);
 #endif
     this->_parked = true;
   }
@@ -91,6 +91,12 @@ void Monitor::SetMediumRangeIN(unsigned int mediumRangeIN) {
 void Monitor::SetFarRangeIN(unsigned int farRangeIN) {
   this->_farRangeIN = farRangeIN;
 }
+
+#ifndef  __AVR_ATtiny85__
+Leds* Monitor::GetLeds() {
+    return &_leds;
+}
+#endif
 
 unsigned int Monitor::GetDistanceIN() {
   return this->_distance;

@@ -21,5 +21,10 @@ void loop() {
   monitor.Run();
   DEBUG_PRINT_NOTICE("Refreshed in: " + (String)monitor.GetLoopSpeedMs() + " Millis");
   DEBUG_PRINT_INFO("Distance: " + (String)monitor.GetDistanceIN() + " Inches");
+
+#ifndef __AVR_ATtiny85__
+  DEBUG_PRINT_INFO("CurrentColor: " + monitor.GetLeds()->GetColor().GetName());
+#endif
+
   DEBUG_PRINTLN(" ");
 }

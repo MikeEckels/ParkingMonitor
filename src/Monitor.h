@@ -29,9 +29,6 @@ class Monitor {
 
 #ifndef __AVR_ATtiny85__
     Leds _leds;
-    Color _RED = Color(255, 0, 0, 0);
-    Color _GREEN = Color(0, 255, 0, 0);
-    Color _YELLOW = Color(255, 128, 0, 0);
 #endif
     SharpIR _Ir = SharpIR(_irPin, _irModel);
 
@@ -46,6 +43,10 @@ class Monitor {
     void SetCloseRangeIN(unsigned int closeRangeIN);
     void SetMediumRangeIN(unsigned int mediumRangeIN);
     void SetFarRangeIN(unsigned int farRangeIN);
+
+#ifndef  __AVR_ATtiny85__
+    Leds* GetLeds();
+#endif
 
     unsigned int GetDistanceIN();
     unsigned long GetLoopSpeedMs();
