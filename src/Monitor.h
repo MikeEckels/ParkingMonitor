@@ -19,9 +19,9 @@ class Monitor {
     const unsigned int _irModel = 20150;
     
     unsigned int _updateSpeedMs = 500;
-    unsigned int _closeRangeIN = 9;
-    unsigned int _mediumRangeIN = 48; //4ft
-    unsigned int _farRangeIN = 96; //8ft
+    unsigned int _closeRangeIN = 60; //5ft
+    unsigned int _mediumRangeIN = 72; //6ft
+    unsigned int _farRangeIN = 120; //10ft
 
     unsigned long _loopSpeed = 0;
     int _distance = 0;
