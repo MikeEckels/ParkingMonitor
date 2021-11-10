@@ -23,9 +23,11 @@ void Monitor::Run() {
   this->_distance = _Ir.distance();
   this->_distance = constrain(this->_distance, 20, 460);
   this->_distance = (float)this->_distance / (float)2.54;
-
+  
   if(this->_distance >= this->_farRangeIN) {
     this->_parked = false;
+    this->_parkedAndOff = false;
+    this->_previousTime = millis();
 #ifdef __AVR_ATtiny85__
     analogWrite(1, 0);
     analogWrite(0, 0);
@@ -34,7 +36,7 @@ void Monitor::Run() {
 #endif
   }
 
-  if(this->_parked == false && this->_distance >= this->_mediumRangeIN && this->_distance < this->_farRangeIN) {
+  if (this->_parked == false && this->_parkedAndOff == false && this->_distance >= this->_mediumRangeIN && this->_distance < this->_farRangeIN) {
 #ifdef __AVR_ATtiny85__
       analogWrite(1, 0);
       analogWrite(0, 0);
@@ -45,7 +47,7 @@ void Monitor::Run() {
 #endif
   }
 
-  if(this->_parked == false && this->_distance >= this->_closeRangeIN && this->_distance < this->_mediumRangeIN) {
+  if(this->_parked == false && this->_parkedAndOff == false && this->_distance >= this->_closeRangeIN && this->_distance < this->_mediumRangeIN) {
 #ifdef __AVR_ATtiny85__
       analogWrite(1, 0);
       analogWrite(0, 0);
@@ -57,7 +59,7 @@ void Monitor::Run() {
 #endif
   }
 
-  if(this->_parked == false && this->_distance <= this->_closeRangeIN){
+  if(this->_parked == false && this->_parkedAndOff == false && this->_distance <= this->_closeRangeIN){
 #ifdef __AVR_ATtiny85__
       analogWrite(1, 0);
       analogWrite(0, 0);
@@ -66,7 +68,21 @@ void Monitor::Run() {
       this->_leds.Clear();
       this->_leds.SetColor(this->_leds.Colors.Red);
 #endif
-    this->_parked = true;
+      this->_parked = true;
+  }
+
+  if (this->_parked == true && this->_parkedAndOff == false) {
+      unsigned long startTime = millis();
+      if (startTime - this->_previousTime > this->_parkedWatchDogInterval) {
+          this->_previousTime = startTime;
+#ifdef __AVR_ATtiny85__
+          analogWrite(1, 0);
+          analogWrite(0, 0);;
+#else
+          this->_leds.Clear();
+#endif
+          this->_parkedAndOff = true;
+      }
   }
 
 #ifndef __AVR_ATtiny85__
